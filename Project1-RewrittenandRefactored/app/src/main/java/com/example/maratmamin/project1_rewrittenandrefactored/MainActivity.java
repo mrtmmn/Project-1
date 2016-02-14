@@ -16,18 +16,18 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     final static int requestCode2 = 2;
 
-    Button mAddButton;
-    Button mRemoveButton;
+    Button mAddButton, mRemoveButton;
 
     ListView mMainActivityListView;
     EditText mInputTask;
 
-//    ArrayList<String> newArrayList = new ArrayList<String>();
+//    ArrayList<String> mNewArrayList = new ArrayList<String>();
     ArrayList<String> mListOfListTitles = new ArrayList<String>();
-//    ArrayList<ArrayList<String>> mListOfArrayLists = new ArrayList<ArrayList<String>>();
+    ArrayList<ArrayList<String>> mListOfArrayLists = new ArrayList<ArrayList<String>>();
+
     ArrayAdapter<String> mListOfListTitlesAdapter;
 
-    int selectedMainIndex = 1000;
+//    int selectedMainIndex = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mInputTask = (EditText) findViewById(R.id.create_task);
 
         mListOfListTitlesAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, mListOfListTitles);
+//        mMainActivityListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mMainActivityListView.setAdapter(mListOfListTitlesAdapter);
 
         mAddButton.setOnClickListener(new View.OnClickListener() {
@@ -47,10 +48,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mInputTask.getText().length() > 0) {
                     String addButtonGetTextFromMainActivityEditText = mInputTask.getText().toString();
+                    mInputTask.getText().clear();
                     mListOfListTitles.add(addButtonGetTextFromMainActivityEditText);
-                    mMainActivityListView.setAdapter(mListOfListTitlesAdapter);
+                    mListOfArrayLists.add(new ArrayList<String>());
+//                    mMainActivityListView.setAdapter(mListOfListTitlesAdapter);
                     mListOfListTitlesAdapter.notifyDataSetChanged();
-                    mInputTask.setText(" ");
+//                    mInputTask.setText(" ");
+
+//                    mNewArrayList.add(addButtonGetTextFromMainActivityEditText);
+
                 }
                 else {
                     mInputTask.setError("Please Type In Your Task Here");
@@ -66,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mListOfListTitles.remove(mListOfListTitles.size() - 1);
                     mListOfListTitlesAdapter.notifyDataSetChanged();
-                    mInputTask.setText(" ");
+                    mInputTask.getText().clear();
                 }
             }
         });
@@ -75,12 +81,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent toListDetailsIntent = new Intent(MainActivity.this, List_Details.class);
-                Bundle bundle = new Bundle();
-                bundle.putStringArrayList(List_Details.mListDetailsKey, mListOfListTitles);
-                toListDetailsIntent.putExtras(bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putStringArrayList(List_Details.mListDetailsKey, mListOfListTitles);
+                toListDetailsIntent.putExtra(List_Details.mListDetailsKey, mListOfListTitles.get(position));
+                toListDetailsIntent.putStringArrayListExtra("ArrayListOfArrayLists", mListOfArrayLists.get(position));
+                toListDetailsIntent.putExtra("Position", position);
 //                mMainActivityListView.setAdapter(mListOfListTitlesAdapter);
 //                mListOfListTitlesAdapter.notifyDataSetChanged();
-                startActivityForResult(toListDetailsIntent, requestCode2);
+                startActivityForResult(toListDetailsIntent, 0);
             }
         };
 
@@ -101,4 +109,19 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        selectedMainIndex = 1000;
 //    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            
+            ArrayList<String> itemsReturnedArray= data.getStringArrayListExtra("ITEMTASKS");
+
+            mListOfArrayLists.set(data.getIntExtra("Position", -1), itemsReturnedArray);
+
+            //for every Position pressed there's an arraylist saved to it!!!
+
+        }
+    }
 }

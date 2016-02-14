@@ -22,6 +22,8 @@ public class List_Details extends AppCompatActivity {
     ListView mItemListRelatedToSpecificTask;
     EditText mInputItemsIntoListDetailsActivity;
 
+    String mTitleName;
+
 //    ArrayList<Integer> mSelectedIndicesArrayList = new ArrayList<Integer>();
     ArrayList<String> mListOfItemsArrayList = new ArrayList<String>();
     ArrayAdapter<String> mListOfItemsAdapter;
@@ -42,13 +44,14 @@ public class List_Details extends AppCompatActivity {
 //        mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
 
 //        if (getIntent().hasExtra(mListDetailsKey)) {
-            mListOfItemsArrayList = getIntent().getStringArrayListExtra(mListDetailsKey);
+        mListOfItemsArrayList = getIntent().getStringArrayListExtra("ArrayListOfArrayLists");
 //            mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
 //            mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
-            mTaskName.setText(mListOfItemsArrayList.get(0).toString());
+        mTitleName = getIntent().getStringExtra(mListDetailsKey);
+        mTaskName.setText(mTitleName);
 
-//            mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListofTitleForTaskName);
-//            mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
+            mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
+            mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
 
 //        }
 
@@ -60,10 +63,11 @@ public class List_Details extends AppCompatActivity {
                     mInputItemsIntoListDetailsActivity.setError("Please enter task!");
                 } else {
                     mListOfItemsArrayList.add(mInputItemsIntoListDetailsActivity.getText().toString());
-                    mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
-                    mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
+                    mInputItemsIntoListDetailsActivity.getText().clear();
+//                    mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
+//                    mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
                     mListOfItemsAdapter.notifyDataSetChanged();
-                    mInputItemsIntoListDetailsActivity.setText(" ");
+//                    mInputItemsIntoListDetailsActivity.setText(" ");
                 }
             }
         });
@@ -75,8 +79,8 @@ public class List_Details extends AppCompatActivity {
                     Toast.makeText(List_Details.this, "There is nothing to remove.", Toast.LENGTH_LONG).show();
                 } else {
                     mListOfItemsArrayList.remove(mListOfItemsArrayList.size() - 1);
-                    mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
-                    mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
+//                    mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
+//                    mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
                     mListOfItemsAdapter.notifyDataSetChanged();
                 }
             }
@@ -85,16 +89,34 @@ public class List_Details extends AppCompatActivity {
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent toMainListIntent = new Intent(List_Details.this, MainActivity.class);
-                Bundle bundle = new Bundle();
-                mListOfItemsArrayList.set(0, mTaskName.getText().toString());
-                bundle.putStringArrayList(mListDetailsKey, mListOfItemsArrayList);
-                //mListOfItemsArrayList or mListOfTaskNamesArrayList => or should they be consolidated???!!!
-                toMainListIntent.putExtras(bundle);
-                setResult(RESULT_OK,toMainListIntent);
+//                Intent toMainListIntent = new Intent(List_Details.this, MainActivity.class);
+//                Bundle bundle = new Bundle();
+//                mListOfItemsArrayList.set(0, mTaskName.getText().toString());
+//                bundle.putStringArrayList(mListDetailsKey, mListOfItemsArrayList);
+//                //mListOfItemsArrayList or mListOfTaskNamesArrayList => or should they be consolidated???!!!
+//                toMainListIntent.putExtras(bundle);
+//                setResult(RESULT_OK,toMainListIntent);
+//                finish();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("Position", getIntent().getIntExtra("Position", -1));
+
+                returnIntent.putStringArrayListExtra("ITEMTASKS", mListOfItemsArrayList);
+
+                setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
-
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        Intent returnIntent= new Intent();
+//        returnIntent.putExtra("Position", getIntent().getIntExtra("Position", -1));
+//
+//        returnIntent.putStringArrayListExtra("ITEMTASKS", mNewListArray);
+//
+//        setResult(RESULT_OK, returnIntent);
+//        finish();
+//    }
+
 }
