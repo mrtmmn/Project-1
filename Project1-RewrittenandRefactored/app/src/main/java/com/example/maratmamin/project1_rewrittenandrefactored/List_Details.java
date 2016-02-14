@@ -16,6 +16,9 @@ import java.util.List;
 
 public class List_Details extends AppCompatActivity {
     final static String mListDetailsKey = "array";
+    final static String mALALS = "ArrayListOfArrayLists";
+    final static String mIntPos = "Position";
+    final static int requestCode = -1;
 
     Button mAddButtonInListDetails, mRemoveButtonInListDetails, mBackButton;
     TextView mTaskName;
@@ -38,13 +41,14 @@ public class List_Details extends AppCompatActivity {
         mBackButton = (Button) findViewById(R.id.back_button);
         mTaskName = (TextView) findViewById(R.id.main_title_text_view);
         mItemListRelatedToSpecificTask = (ListView) findViewById(R.id.list_of_lists_details);
+
         mInputItemsIntoListDetailsActivity = (EditText) findViewById(R.id.list_details_edit_text);
 
 //        mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
 //        mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
 
 //        if (getIntent().hasExtra(mListDetailsKey)) {
-        mListOfItemsArrayList = getIntent().getStringArrayListExtra("ArrayListOfArrayLists");
+        mListOfItemsArrayList = getIntent().getStringArrayListExtra(mALALS);
 //            mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
 //            mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
         mTitleName = getIntent().getStringExtra(mListDetailsKey);
@@ -62,7 +66,9 @@ public class List_Details extends AppCompatActivity {
                     // or (mInputItemsIntoListDetailsActivity.getText().length() == 0)
                     mInputItemsIntoListDetailsActivity.setError("Please enter task!");
                 } else {
-                    mListOfItemsArrayList.add(mInputItemsIntoListDetailsActivity.getText().toString());
+                    String input = mInputItemsIntoListDetailsActivity.getText().toString();
+                    String input2 = input.substring(0,1).toUpperCase() + input.substring(1);
+                    mListOfItemsArrayList.add(input2);
                     mInputItemsIntoListDetailsActivity.getText().clear();
 //                    mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
 //                    mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
@@ -82,6 +88,7 @@ public class List_Details extends AppCompatActivity {
 //                    mListOfItemsAdapter = new ArrayAdapter<String>(List_Details.this, android.R.layout.simple_list_item_1, mListOfItemsArrayList);
 //                    mItemListRelatedToSpecificTask.setAdapter(mListOfItemsAdapter);
                     mListOfItemsAdapter.notifyDataSetChanged();
+                    mInputItemsIntoListDetailsActivity.getText().clear();
                 }
             }
         });
@@ -98,9 +105,9 @@ public class List_Details extends AppCompatActivity {
 //                setResult(RESULT_OK,toMainListIntent);
 //                finish();
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("Position", getIntent().getIntExtra("Position", -1));
+                returnIntent.putExtra(mIntPos, getIntent().getIntExtra(mIntPos, requestCode));
 
-                returnIntent.putStringArrayListExtra("ITEMTASKS", mListOfItemsArrayList);
+                returnIntent.putStringArrayListExtra(MainActivity.mAllSubTasks, mListOfItemsArrayList);
 
                 setResult(RESULT_OK, returnIntent);
                 finish();
@@ -108,15 +115,15 @@ public class List_Details extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Intent returnIntent= new Intent();
-//        returnIntent.putExtra("Position", getIntent().getIntExtra("Position", -1));
-//
-//        returnIntent.putStringArrayListExtra("ITEMTASKS", mNewListArray);
-//
-//        setResult(RESULT_OK, returnIntent);
-//        finish();
-//    }
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(mIntPos, getIntent().getIntExtra(mIntPos, requestCode));
+
+        returnIntent.putStringArrayListExtra(MainActivity.mAllSubTasks, mListOfItemsArrayList);
+
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
 
 }

@@ -14,7 +14,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    final static int requestCode2 = 2;
+    final static int requestCode = -1;
+    final static String mIntPos = "Position";
+    final static String mAllSubTasks = "AllSubTasks";
 
     Button mAddButton, mRemoveButton;
 
@@ -48,8 +50,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mInputTask.getText().length() > 0) {
                     String addButtonGetTextFromMainActivityEditText = mInputTask.getText().toString();
+                    String addButtonGetTextFromMainActivityEditText2 = addButtonGetTextFromMainActivityEditText.substring(0, 1).toUpperCase() + addButtonGetTextFromMainActivityEditText.substring(1);
                     mInputTask.getText().clear();
-                    mListOfListTitles.add(addButtonGetTextFromMainActivityEditText);
+                    mListOfListTitles.add(addButtonGetTextFromMainActivityEditText2);
                     mListOfArrayLists.add(new ArrayList<String>());
 //                    mMainActivityListView.setAdapter(mListOfListTitlesAdapter);
                     mListOfListTitlesAdapter.notifyDataSetChanged();
@@ -84,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
 //                Bundle bundle = new Bundle();
 //                bundle.putStringArrayList(List_Details.mListDetailsKey, mListOfListTitles);
                 toListDetailsIntent.putExtra(List_Details.mListDetailsKey, mListOfListTitles.get(position));
-                toListDetailsIntent.putStringArrayListExtra("ArrayListOfArrayLists", mListOfArrayLists.get(position));
-                toListDetailsIntent.putExtra("Position", position);
+                toListDetailsIntent.putStringArrayListExtra(List_Details.mALALS, mListOfArrayLists.get(position));
+                toListDetailsIntent.putExtra(List_Details.mIntPos, position);
 //                mMainActivityListView.setAdapter(mListOfListTitlesAdapter);
 //                mListOfListTitlesAdapter.notifyDataSetChanged();
                 startActivityForResult(toListDetailsIntent, 0);
@@ -115,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            
-            ArrayList<String> itemsReturnedArray= data.getStringArrayListExtra("ITEMTASKS");
 
-            mListOfArrayLists.set(data.getIntExtra("Position", -1), itemsReturnedArray);
+            ArrayList<String> itemsReturnedArray= data.getStringArrayListExtra(mAllSubTasks);
+
+            mListOfArrayLists.set(data.getIntExtra(mIntPos, requestCode), itemsReturnedArray);
 
             //for every Position pressed there's an arraylist saved to it!!!
 
