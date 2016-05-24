@@ -3,6 +3,7 @@ package com.example.maratmamin.project1_rewrittenandrefactored;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -95,7 +96,19 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("position", "onItemLongClick: " + position);
+                mListOfListTitles.remove(position);
+                mListOfListTitlesAdapter.notifyDataSetChanged();
+                mInputTask.getText().clear();
+                return false;
+            }
+        };
+
         mMainActivityListView.setOnItemClickListener(mainActivityOnItemClickListener);
+        mMainActivityListView.setOnItemLongClickListener(onItemLongClickListener);
     }
 
 //    @Override
@@ -119,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
 
-            ArrayList<String> itemsReturnedArray= data.getStringArrayListExtra(mAllSubTasks);
+            ArrayList<String> itemsReturnedArray = data.getStringArrayListExtra(mAllSubTasks);
 
             mListOfArrayLists.set(data.getIntExtra(mIntPos, requestCode), itemsReturnedArray);
 

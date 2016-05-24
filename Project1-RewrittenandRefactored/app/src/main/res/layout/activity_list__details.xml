@@ -13,9 +13,8 @@
         android:layout_width="70dp"
         android:layout_height="35dp"
         android:id="@+id/back_button"
-        android:text="TASKS"
         android:textSize="18dp"
-        android:background="#168de9"/>
+        android:background="#00fbff"/>
     <TextView
         android:id="@+id/main_title_text_view"
         android:layout_width="match_parent"
@@ -29,8 +28,7 @@
         android:textAllCaps="true"
         android:textSize="40sp"
         android:textColor="#ffffff"
-        android:textStyle="bold"
-        android:text="GROCERIES"/>
+        android:textStyle="bold"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -3,7 +3,9 @@ package com.example.maratmamin.project1_rewrittenandrefactored;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -113,6 +115,19 @@ public class List_Details extends AppCompatActivity {
                 finish();
             }
         });
+
+        AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("position", "onItemLongClick: " + position);
+                mListOfItemsArrayList.remove(position);
+                mListOfItemsAdapter.notifyDataSetChanged();
+                mInputItemsIntoListDetailsActivity.getText().clear();
+                return false;
+            }
+        };
+
+        mItemListRelatedToSpecificTask.setOnItemLongClickListener(onItemLongClickListener);
     }
 
     @Override
